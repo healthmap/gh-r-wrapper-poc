@@ -12,7 +12,7 @@ from rpy2.robjects.conversion import localconverter
 r_source = robjects.r["source"]
 r_source("data.R")
 
-# Get the R functions
+# Get the R function
 print_table = robjects.r["print_arrow_table"]
 
 # Create a table
