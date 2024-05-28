@@ -37,10 +37,14 @@ def run_example(t_rep, t_symptom_pre, t_symptom_post, plot_name):
 if __name__ == "__main__":
     PLOT_HTML_FILENAME = "symptoms.html"
     SYMPTOMS_MATRIX_FILENAME = "symptoms.csv"
+    print("Starting R analysis from Python...")
     result = run_example(50, 30, 5, "symptoms.html")
+    print("R analysis completed!")
+    print("Converting R matrix to Python matrix...")
     symptoms_matrix_r = result["stan_extract"][0]
     with (ro.default_converter + pandas2ri.converter).context():
         symptoms_matrix_np = ro.conversion.get_conversion().rpy2py(symptoms_matrix_r)
+    print("Conversion complete!")
     np.savetxt(SYMPTOMS_MATRIX_FILENAME, symptoms_matrix_np, delimiter=",")
     print("\n-----")
     print(f"Interactive plot saved at: {PLOT_HTML_FILENAME}")
