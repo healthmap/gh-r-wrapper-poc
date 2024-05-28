@@ -1,15 +1,12 @@
 # Taken from https://github.com/BDI-pathogens/EpiLine/tree/main?tab=readme-ov-file#example-results
 
-library( EpiLine )
-set.seed( 1 )
+library(EpiLine)
+library(htmlwidgets)
+set.seed(1)
 
 # Run the EpiLine example
-run <- function() {
-  # define the length of the simulatiopn
-  t_rep          <- 50 # length of time for which data is reported
-  t_symptom_pre  <- 30 # time before the reporting period to simulate
-  t_symptom_post <- 5  # time after the reporting period to simulate
-  t_max          <- t_rep + t_symptom_post + t_symptom_pre
+run <- function(t_rep, t_symptom_pre, t_symptom_post, plot_name) {
+  t_max <- t_rep + t_symptom_post + t_symptom_pre
 
   # set up the variable r(t) and distribution
   symptom_0 <- 2                                # initial number of symptomatic people
@@ -36,8 +33,18 @@ run <- function() {
   # fit using model
   mcmc_n_samples <- 100
   mcmc_n_chains  <- 1
-  fit <- symptom_report.fit( reported, ll_symptom, ll_report, report_date = report_date, 
-                             mcmc_n_samples = mcmc_n_samples, mcmc_n_chains = mcmc_n_chains )
+  fit <- symptom_report.fit(
+    reported,
+    ll_symptom,
+    ll_report,
+    
+    report_date = report_date,
+    mcmc_n_samples = mcmc_n_samples,
+    mcmc_n_chains = mcmc_n_chains
+  )
+  
+  plot_symptoms <- fit$plot.symptoms(show = FALSE, simulation = simulation)
+  saveWidget(plot_symptoms, plot_name, selfcontained = FALSE)
 
-  return("Ran without issue")
+  return(fit)
 }
